@@ -1,0 +1,84 @@
+import matplotlib.pyplot as plt
+import random
+
+vitoria = 0
+derrota = 0
+vetor_de_vitoria = []
+vetor_de_vitoriaNoTrade = []
+vitoria2 = 0
+derrota2 = 0
+
+#Sendo o jogo composto pelas portas 1,2 e 3.
+
+for i in range (10000):
+  Portas = [1,2,3]
+  #Escolher a porta premiada
+  Portapremiada = random.randint(1,3)
+  #Escolher uma porta para o jogador
+  Portaescolhida = random.randint(1,3)
+  #Excluir uma porta:
+  loop= True
+  while (loop == True):
+    Portaexcluida = random.randint(1,3)
+    if Portaexcluida != Portaescolhida and Portaexcluida != Portapremiada:
+      Portas.remove(Portaexcluida)
+      loop = False
+
+#Trocando a porta
+  Portas.remove(Portaescolhida)
+  if Portas[0] == Portapremiada:
+    vitoria += 1
+  else:
+    derrota += 1
+  vetor_de_vitoria.append(vitoria/(i+1))
+  PercentualFinalTrade = vitoria*100/(vitoria + derrota)
+
+#Sem trocar a porta
+
+for i2 in range (10000):
+  Portas = [1,2,3]
+  #Escolher a porta premiada
+  Portapremiada = random.randint(1,3)
+  #Escolher uma porta para o jogador
+  Portaescolhida = random.randint(1,3)
+  #Excluir uma porta:
+  while (True):
+    Portaexcluida = random.randint(1,3)
+    if Portaexcluida != Portaescolhida and Portaexcluida != Portapremiada:
+      Portas.remove(Portaexcluida)
+      break
+
+  if Portaescolhida == Portapremiada:
+    vitoria2 += 1
+  else:
+    derrota2 += 1
+  vetor_de_vitoriaNoTrade.append(vitoria2/(i2+1))
+  
+  PercentualFinalNoTrade = vitoria2*100/(vitoria2 + derrota2)
+
+print ("\nJogos que a porta foi trocada:")
+print ("  vitorias:", vitoria)
+print ("  derrotas:", derrota)
+print ("  Proporcao de vitorias: %.2f%%" % PercentualFinalTrade)
+
+print ("\nJogos que a porta não foi trocada:")
+print ("  vitorias:", vitoria2)
+print ("  derrotas:", derrota2)
+print ("  Proporcao de vitorias: %.2f%%" % PercentualFinalNoTrade)
+
+grap = plt.figure(1, figsize=(12,12))
+
+plotgrafico = grap.add_subplot(111)
+
+plotgrafico.set_title('Porta dos desesperados - Proporcao acumulada')
+plt.xlabel('Numero de jogos')
+plt.ylabel('Porcentagem de vitorias(%)')
+
+plotgrafico.plot(range(10000), vetor_de_vitoria, color='b', label='Trocando de porta')
+plotgrafico.plot(range(10000), vetor_de_vitoriaNoTrade, color='g', label='Sem trocar a porta')
+
+#ax.set_xlim(left=0)
+
+leg = plotgrafico.legend()
+
+plt.show()
